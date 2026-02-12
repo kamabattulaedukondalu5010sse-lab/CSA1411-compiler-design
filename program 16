@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char exp[100], lhs[20], op1[20], op2[20], op;
+    char temp[10];
+    int i = 0, t = 1;
+
+    printf("Enter Expression (Example: a=b+c+d-e): ");
+    scanf("%s", exp);
+
+    /* Get LHS */
+    sscanf(exp, "%[^=]=%s", lhs, exp);
+
+    /* First Operation */
+    sscanf(exp, "%[^+-]%c%[^+-]", op1, &op, op2);
+
+    printf("\nt%d = %s %c %s", t, op1, op, op2);
+
+    sprintf(temp, "t%d", t);
+    t++;
+
+    i = strlen(op1) + strlen(op2) + 2;
+
+    /* Remaining Operations */
+    while (exp[i] != '\0')
+    {
+        op = exp[i];
+        i++;
+
+        sscanf(&exp[i], "%[^+-]", op2);
+
+        printf("\nt%d = %s %c %s", t, temp, op, op2);
+
+        sprintf(temp, "t%d", t);
+        t++;
+
+        i += strlen(op2);
+    }
+
+    /* Final Assignment */
+    printf("\n%s = %s\n", lhs, temp);
+
+    return 0;
+}
+
+OUTPUT:
+Enter Expression (Example: a=b+c+d-e): a=b*c+d-e
+
+t1 = b*c + d
+t2 = t1 e d
+t3 = t2 e d
+a = t3
