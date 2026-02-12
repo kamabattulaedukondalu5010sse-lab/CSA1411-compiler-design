@@ -33,5 +33,12 @@ int main() {
     }
 
     return 0;
-}
+} 
+
+
+OUTPUT: Enter the string: a = b + c * e + 100
+
+Identifiers: a b c e
+Constants: 100
+Operators: = + * +
 
