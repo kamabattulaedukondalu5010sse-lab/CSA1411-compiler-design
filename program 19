@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>   // Needed for strcat
+
+int main()
+{
+    int i;
+
+    char prod[6][10] = {
+        "E=E+T",
+        "E=T",
+        "T=T*F",
+        "T=F",
+        "F=(E)",
+        "F=i"
+    };
+
+    char leadE[10] = "";
+    char leadT[10] = "";
+    char leadF[10] = "";
+
+    printf("LEADING Sets:\n\n");
+
+    for (i = 0; i < 6; i++)
+    {
+        char lhs = prod[i][0];
+        char rhs = prod[i][2];
+
+        // If RHS starts with terminal
+        if (!isupper(rhs))
+        {
+            char temp[2];
+            temp[0] = rhs;
+            temp[1] = '\0';
+
+            if (lhs == 'E')
+                strcat(leadE, temp);
+
+            if (lhs == 'T')
+                strcat(leadT, temp);
+
+            if (lhs == 'F')
+                strcat(leadF, temp);
+        }
+    }
+
+    printf("LEADING(E) = { %s }\n", leadE);
+    printf("LEADING(T) = { %s }\n", leadT);
+    printf("LEADING(F) = { %s }\n", leadF);
+
+    return 0;
+}
+
+OUTPUT:
+LEADING Sets:
+
+LEADING(E) = {  }
+LEADING(T) = {  }
+LEADING(F) = { (i }
