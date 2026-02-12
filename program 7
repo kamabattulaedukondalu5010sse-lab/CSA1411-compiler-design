@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+void FIRST(char[], char);
+void addToResultSet(char[], char);
+
+int numOfProductions;
+char productionSet[10][20];
+
+int main()
+{
+    int i;
+    char choice;
+    char c;
+    char result[20];
+
+    printf("How many number of productions ? : ");
+    scanf("%d", &numOfProductions);
+
+    for (i = 0; i < numOfProductions; i++)
+    {
+        printf("Enter production Number %d : ", i + 1);
+        scanf("%s", productionSet[i]);
+    }
+
+    do
+    {
+        printf("\nFind the FIRST of : ");
+        scanf(" %c", &c);
+
+        FIRST(result, c);
+
+        printf("FIRST(%c)= { ", c);
+
+        for (i = 0; result[i] != '\0'; i++)
+            printf("%c ", result[i]);
+
+        printf("}\n");
+
+        printf("Press 'y' to continue : ");
+        scanf(" %c", &choice);
+
+    } while (choice == 'y' || choice == 'Y');
+
+    return 0;
+}
+
+/* Function to compute FIRST */
+void FIRST(char Result[], char c)
+{
+    int i, j, k;
+    char subResult[20];
+    int foundEpsilon;
+
+    Result[0] = '\0';
+
+    // If terminal, add to FIRST
+    if (!isupper(c))
+    {
+        addToResultSet(Result, c);
+        return;
+    }
+
+    // For each production
+    for (i = 0; i < numOfProductions; i++)
+    {
+        // Check LHS
+        if (productionSet[i][0] == c)
+        {
+            // If epsilon production
+            if (productionSet[i][2] == '$')
+            {
+                addToResultSet(Result, '$');
+            }
+            else
+            {
+                j = 2;
+
+                while (productionSet[i][j] != '\0')
+                {
+                    foundEpsilon = 0;
+                    subResult[0] = '\0';
+
+                    FIRST(subResult, productionSet[i][j]);
+
+                    // Add subResult to Result
+                    for (k = 0; subResult[k] != '\0'; k++)
+                        addToResultSet(Result, subResult[k]);
+
+                    // Check epsilon
+                    for (k = 0; subResult[k] != '\0'; k++)
+                    {
+                        if (subResult[k] == '$')
+                        {
+                            foundEpsilon = 1;
+                            break;
+                        }
+                    }
+
+                    if (!foundEpsilon)
+                        break;
+
+                    j++;
+                }
+            }
+        }
+    }
+}
+
+/* Add symbol to result (no duplicates) */
+void addToResultSet(char Result[], char val)
+{
+    int k;
+
+    for (k = 0; Result[k] != '\0'; k++)
+    {
+        if (Result[k] == val)
+            return;
+    }
+
+    Result[k] = val;
+    Result[k + 1] = '\0';
+}
+
+OUTPUT:
+How many number of productions ? : 4
+Enter production Number 1 : S=AaAb
+Enter production Number 2 : S=BbBa
+Enter production Number 3 : A=$
+Enter production Number 4 : B=$
+
+Find the FIRST of : s
+FIRST(s)= { s }
+Press 'y' to continue : y
+
+Find the FIRST of : A
+FIRST(A)= { $ }
+Press 'y' to continue : y
+
+Find the FIRST of : B
+FIRST(B)= { $ }
+Press 'y' to continue : n
