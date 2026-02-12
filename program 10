@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char gram[50], part1[50], part2[50];
+    char modified[50], newgram[50];
+    int i, j = 0, k = 0, pos = 0;
+
+    printf("Enter Production (Example: iEtS|iEtSeS|a): ");
+    fgets(gram, sizeof(gram), stdin);
+
+    // Remove newline
+    gram[strcspn(gram, "\n")] = '\0';
+
+    /* Split first two alternatives */
+    for (i = 0; gram[i] != '|' && gram[i] != '\0'; i++, j++)
+        part1[j] = gram[i];
+
+    part1[j] = '\0';
+
+    i++; // skip '|'
+    j = 0;
+
+    for (; gram[i] != '|' && gram[i] != '\0'; i++, j++)
+        part2[j] = gram[i];
+
+    part2[j] = '\0';
+
+    /* Find common prefix */
+    for (i = 0; part1[i] != '\0' && part2[i] != '\0'; i++)
+    {
+        if (part1[i] == part2[i])
+        {
+            modified[k++] = part1[i];
+            pos = i + 1;
+        }
+        else
+            break;
+    }
+
+    /* Create new grammar */
+    modified[k++] = 'X';
+    modified[k] = '\0';
+
+    j = 0;
+
+    for (i = pos; part1[i] != '\0'; i++)
+        newgram[j++] = part1[i];
+
+    newgram[j++] = '|';
+
+    for (i = pos; part2[i] != '\0'; i++)
+        newgram[j++] = part2[i];
+
+    newgram[j] = '\0';
+
+    /* Print Result */
+    printf("\nS->%s", modified);
+    printf("\nX->%s\n", newgram);
+
+    return 0;
+}
+
+OUTPUT:
+Enter Production (Example: iEtS|iEtSeS|a): S-&gt;iEtS|iEtSeS|a
+
+S->X
+X->S-&gt;iEtS|iEtSeS
