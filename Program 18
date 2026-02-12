@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    int n, i;
+    char a[50][10];
+
+    printf("Enter number of intermediate codes: ");
+    scanf("%d", &n);
+
+    for (i = 0; i < n; i++)
+    {
+        printf("Enter 3-address code %d (example: a=b+c): ", i + 1);
+        scanf("%s", a[i]);   // Read full string
+    }
+
+    printf("\nGenerated Target Code:\n");
+
+    for (i = 0; i < n; i++)
+    {
+        char result, op1, op2, oper;
+
+        result = a[i][0];   // left side variable
+        op1    = a[i][2];   // first operand
+        oper   = a[i][3];   // operator
+        op2    = a[i][4];   // second operand
+
+        printf("\nMOV %c, R%d", op1, i);
+
+        switch (oper)
+        {
+            case '+':
+                printf("\nADD %c, R%d", op2, i);
+                break;
+
+            case '-':
+                printf("\nSUB %c, R%d", op2, i);
+                break;
+
+            case '*':
+                printf("\nMUL %c, R%d", op2, i);
+                break;
+
+            case '/':
+                printf("\nDIV %c, R%d", op2, i);
+                break;
+        }
+
+        printf("\nMOV R%d, %c\n", i, result);
+    }
+
+    return 0;
+}
+
+
+OUTPUT:
+Enter number of intermediate codes: 2
+Enter 3-address code 1 (example: a=b+c): a=b+c
+Enter 3-address code 2 (example: a=b+c): B=c*d
+
+Generated Target Code:
+
+MOV b, R0
+ADD c, R0
+MOV R0, a
+
+MOV c, R1
+MUL d, R1
+MOV R1, B
