@@ -49,3 +49,30 @@ int main() {
 
     return 0;
 }
+
+OUTPUT: 
+Enter code (Press Ctrl+Z then Enter to finish):
+main ( )
+main is keyword
+{
+int a, b, c ;
+inta is identifier
+b is identifier
+c is identifier
+c = b + c;
+= is operator
+c is identifier
++ is operator
+b is identifier
+c is identifier
+printf ( &quot;%d&quot; ,c ) ;
+printf is keyword
+quot is identifier
+% is operator
+d is identifier
+quot is identifier
+c is identifier
+}
+
+
+
