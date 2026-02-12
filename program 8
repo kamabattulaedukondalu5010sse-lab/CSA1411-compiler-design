@@ -1,0 +1,146 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+int limit, x = 0;
+char production[10][10], array[10];
+
+void find_first(char ch);
+void find_follow(char ch);
+void add(char ch);
+
+int main()
+{
+    int count;
+    char option, ch;
+
+    printf("Enter Total Number of Productions: ");
+    scanf("%d", &limit);
+
+    for (count = 0; count < limit; count++)
+    {
+        printf("Value of Production Number [%d]: ", count + 1);
+        scanf("%s", production[count]);
+    }
+
+    do
+    {
+        x = 0;
+
+        printf("\nEnter production Value to Find FOLLOW: ");
+        scanf(" %c", &ch);
+
+        find_follow(ch);
+
+        printf("FOLLOW(%c) = { ", ch);
+
+        for (count = 0; count < x; count++)
+            printf("%c ", array[count]);
+
+        printf("}\n");
+
+        printf("To Continue, Press Y: ");
+        scanf(" %c", &option);
+
+    } while (option == 'y' || option == 'Y');
+
+    return 0;
+}
+
+/* Find FOLLOW */
+void find_follow(char ch)
+{
+    int i, j;
+
+    // If start symbol, add $
+    if (production[0][0] == ch)
+        add('$');
+
+    for (i = 0; i < limit; i++)
+    {
+        int length = strlen(production[i]);
+
+        for (j = 2; j < length; j++)
+        {
+            if (production[i][j] == ch)
+            {
+                // If next symbol exists
+                if (production[i][j + 1] != '\0')
+                {
+                    find_first(production[i][j + 1]);
+                }
+
+                // If at end of production
+                if (production[i][j + 1] == '\0' &&
+                    ch != production[i][0])
+                {
+                    find_follow(production[i][0]);
+                }
+            }
+        }
+    }
+}
+
+/* Find FIRST (used for FOLLOW) */
+void find_first(char ch)
+{
+    int i;
+
+    // If terminal
+    if (!isupper(ch))
+    {
+        add(ch);
+        return;
+    }
+
+    for (i = 0; i < limit; i++)
+    {
+        if (production[i][0] == ch)
+        {
+            // Epsilon production
+            if (production[i][2] == '$')
+            {
+                find_follow(production[i][0]);
+            }
+
+            // Terminal
+            else if (!isupper(production[i][2]))
+            {
+                add(production[i][2]);
+            }
+
+            // Non-terminal
+            else
+            {
+                find_first(production[i][2]);
+            }
+        }
+    }
+}
+
+/* Add to FOLLOW set (no duplicates) */
+void add(char ch)
+{
+    int i;
+
+    for (i = 0; i < x; i++)
+    {
+        if (array[i] == ch)
+            return;
+    }
+
+    array[x++] = ch;
+}
+
+OUTPUT:
+Enter Total Number of Productions: 2
+Value of Production Number [1]: S=AaBb
+Value of Production Number [2]: A=$
+
+Enter production Value to Find FOLLOW: S
+FOLLOW(S) = { $ }
+To Continue, Press Y: y
+
+Enter production Value to Find FOLLOW: A
+FOLLOW(A) = { a }
+To Continue, Press Y: n
