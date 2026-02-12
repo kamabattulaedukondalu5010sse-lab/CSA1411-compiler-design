@@ -32,3 +32,10 @@ int main() {
 
     return 0;
 }
+
+OUTPUT:
+Enter text (Press Ctrl+Z + Enter to finish):
+void main()
+Total Words      : 2
+Total Lines      : 2
+Total Characters : 10
