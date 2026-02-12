@@ -37,3 +37,7 @@ int main() {
 
     return 0;
 }
+
+OUTPUT: 
+Enter comment: //hello
+It is a single-line comment
